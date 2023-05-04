@@ -1,6 +1,8 @@
 var direct = 'DIRECT;';
 var proxies = {
 	'ss': 'SOCKS5 127.0.0.1:1080',
+	'hk': 'SOCKS4 127.0.0.1:9999',
+	'west': 'SOCKS5 127.0.0.1:10886',
 };
 
 var hasOwnProperty = Object.hasOwnProperty;
@@ -12,8 +14,15 @@ function isip(host) {
     return false;
 }
 
+function isio(host) {
+    return /^[^\.]+\.io$/.test(host);
+}
+
 function FindProxyForURL(url, host) {
 	var finalDomain = host;
+    if (isio(host)) {
+        return proxies['ss'];
+    }
 	if (!isip(host)) {
 		var splits = finalDomain.split('.').slice(-2);
 		if (splits.length == 1) return direct;
@@ -30,6 +39,44 @@ function FindProxyForURL(url, host) {
 }
 
 var proxyDomains = {
+    "techxmind.com": "hk",
+
+    "typora.io": "ss",
+    "1inch.io": "ss",
+    "0x.org": "ss",
+    "bootstrapcdn.com": "ss",
+    "binance.com": "ss",
+    "etherscan.io": "ss",
+    "disq.us": "ss",
+    "cloudflare-ipfs.com": "ss",
+    "t.me": "ss",
+    "mountain.pm": "ss",
+    "ultramobile.com": "ss",
+    "vimeocdn.com": "ss",
+	"hcaptcha.com": "ss",
+	"akamaized.net": "ss",
+	"openai.com": "ss",
+	"f7tk.com": "ss",
+	"ai.com": "ss",
+    "openai.com": "ss",
+    "zlibcdn.com": "ss",
+    "mirror.xyz": "ss",
+    "ethereum.org": "ss",
+    "geckoterminal.com": "ss",
+    "coingecko.com": "ss",
+    "ftx.com": "ss",
+    "javbus.com": "ss",
+    "javbus.org": "ss",
+    "harmony.one": "ss",
+    "1lib.us": "ss",
+    "tronscan.org": "ss",
+    "tronscan.io": "ss",
+    "tronlink.org": "ss",
+    "tron.network": "ss",
+    "jetbrains.com": "ss",
+    "v2ex.com": "ss",
+    "notion.so": "ss",
+    "privoxy.org": "ss",
     "gitbook.io": "ss",
     "gitbook.com": "ss",
     "heroku.com": "ss",
@@ -494,7 +541,6 @@ var proxyDomains = {
     "com.ar": "ss",
     "com.au": "ss",
     "com.br": "ss",
-    "com.cn": "ss",
     "com.hk": "ss",
     "com.my": "ss",
     "com.ru": "ss",
@@ -919,8 +965,10 @@ var proxyDomains = {
     "girlbanker.com": "ss",
     "git-scm.com": "ss",
     "gitbooks.io": "ss",
+    "githubassets.com": "ss",
     "github.com": "ss",
     "github.io": "ss",
+    "githubusercontent.com": "ss",
     "givemesomethingtoread.com": "ss",
     "glennhilton.com": "ss",
     "global.hkepc.com*forum": "ss",
@@ -1195,7 +1243,6 @@ var proxyDomains = {
     "internetpopculture.com": "ss",
     "inxian.com": "ss",
     "iobit.com": "ss",
-    "ip.cn": "ss",
     "iphone-dev.org": "ss",
     "iphone4hongkong.com": "ss",
     "iphonehacks.com": "ss",
