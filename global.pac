@@ -1,8 +1,10 @@
 var direct = 'DIRECT;';
-var proxies = {
-	'ss': 'SOCKS5 127.0.0.1:1080',
-	'hk': 'SOCKS4 127.0.0.1:9999',
-	'west': 'SOCKS5 127.0.0.1:10886',
+var proxies = { // 下面这种写法才能兼容chrome和safari
+    'ss': 'SOCKS5 127.0.0.1:1080; SOCKS 127.0.0.1:1080;',
+    'sg': 'SOCKS5 127.0.0.1:1081; SOCKS 127.0.0.1:1081;',
+    'jp': 'SOCKS5 127.0.0.1:1082; SOCKS 127.0.0.1:1082;',
+    'hk': 'SOCKS4 127.0.0.1:9999; SOCKS 127.0.0.1:9999;',
+    'west': 'SOCKS5 127.0.0.1:10886; SOCKS 127.0.0.1:10886;',
 };
 
 var hasOwnProperty = Object.hasOwnProperty;
@@ -15,37 +17,91 @@ function isip(host) {
 }
 
 function isio(host) {
-    return /^[^\.]+\.io$/.test(host);
+    return /[^\.]+\.[io|edu|ph|jp|hk|us|top|tv]+$/.test(host);
 }
 
 function FindProxyForURL(url, host) {
-	var finalDomain = host;
-    if (isio(host)) {
+    var finalDomain = host;
+    if (!isip(host)) {
+        var splits = finalDomain.split('.').slice(-2);
+        if (splits.length == 1) return direct;
+        finalDomain = splits.join('.');
+    }
+    if (hasOwnProperty.call(proxyDomains, finalDomain)) {
+        var proxyName = proxyDomains[finalDomain];
+        if (hasOwnProperty.call(proxies, proxyName)) {
+            return proxies[proxyName];
+        }
+    }
+    
+    if (isio(host)) { // 优先级最低规则
         return proxies['ss'];
     }
-	if (!isip(host)) {
-		var splits = finalDomain.split('.').slice(-2);
-		if (splits.length == 1) return direct;
-		finalDomain = splits.join('.');
-	}
-	if (!hasOwnProperty.call(proxyDomains, finalDomain)) 
-		return direct;
-	
-	var proxyName = proxyDomains[finalDomain];
-	if (!hasOwnProperty.call(proxies, proxyName)) 
-		return direct;
-	
-	return proxies[proxyName];
+
+    return direct;
 }
 
 var proxyDomains = {
+    // openai
+    "auth0.com": "jp",
+    "challenges.cloudflare.com": "jp",
+    "client-api.arkoselabs.com": "jp",
+    "events.statsigapi.net": "jp",
+    "featuregates.org": "jp",
+    "identrust.com": "jp",
+    "intercom.io": "jp",
+    "intercomcdn.com": "jp",
+    "openai.com": "jp",
+    "openaiapi-site.azureedge.net": "jp",
+    "sentry.io": "jp",
+    "stripe.com": "jp",
+
+    // ip test
+    "whatismyip.com": "jp",
+    "ip.cn": "jp",
+    "ip138.com": "jp",
+
     "techxmind.com": "hk",
 
+    "nexo.com": "jp",
+    "binance.com": "jp",
+    "bnbstatic.com": "jp",
+    "tronscan.org": "jp",
+    "tron.network": "jp",
+    "sun.io": "jp",
+    "usdd.io": "jp",
+    "tdr.org": "jp",
+
+    "venmo.com": "ss",
+    "uniswap.org": "ss",
+    "temu.com": "ss",
+    "fx110.com": "ss",
+    "bibox.com": "ss",
+    "uscardforum.com": "ss",
+    "okx.com": "ss",
+    "feee.io": "ss",
+    "ahhhhfs.com": "ss",
+    "tradingview.com": "ss",
+    "interactivebrokers.com": "ss",
+    "paypal.com": "ss",
+    "hemin.im": "ss",
+    "kraken.com": "ss",
+    "swissquote.ch": "ss",
+    "swissquote.com": "ss",
+    "followme.com": "ss",
+    "schwab.com": "ss",
+    "rlcdn.com": "ss",
+    "schwabcdn.com": "ss",
+    "buysellads.net": "ss",
+    "servedby-buysellads.com": "ss",
+    "bitfinex.com": "ss",
+    "kikitrade.com": "ss",
+    "tidebit.com": "ss",
+    "okcoin.com": "ss",
     "typora.io": "ss",
     "1inch.io": "ss",
     "0x.org": "ss",
     "bootstrapcdn.com": "ss",
-    "binance.com": "ss",
     "etherscan.io": "ss",
     "disq.us": "ss",
     "cloudflare-ipfs.com": "ss",
@@ -53,12 +109,10 @@ var proxyDomains = {
     "mountain.pm": "ss",
     "ultramobile.com": "ss",
     "vimeocdn.com": "ss",
-	"hcaptcha.com": "ss",
-	"akamaized.net": "ss",
-	"openai.com": "ss",
-	"f7tk.com": "ss",
-	"ai.com": "ss",
-    "openai.com": "ss",
+    "hcaptcha.com": "ss",
+    "akamaized.net": "ss",
+    "f7tk.com": "ss",
+    "ai.com": "ss",
     "zlibcdn.com": "ss",
     "mirror.xyz": "ss",
     "ethereum.org": "ss",
@@ -90,7 +144,7 @@ var proxyDomains = {
     "cmbwinglungbank.com": "ss",
     "64clouds.com": "ss",
     "github.blog": "ss",
-	
+    
     "0rz.tw": "ss",
     "0to255.com": "ss",
     "100ke.org": "ss",
