@@ -3,7 +3,8 @@ var proxies = { // 下面这种写法才能兼容chrome和safari
     'ss': 'SOCKS5 127.0.0.1:1080; SOCKS 127.0.0.1:1080;',
     'sg': 'SOCKS5 127.0.0.1:1081; SOCKS 127.0.0.1:1081;',
     'jp': 'SOCKS5 127.0.0.1:1082; SOCKS 127.0.0.1:1082;',
-    'hk': 'SOCKS4 127.0.0.1:9999; SOCKS 127.0.0.1:9999;',
+    'hk': 'SOCKS5 127.0.0.1:1083; SOCKS 127.0.0.1:1083;',
+    'tm': 'SOCKS4 127.0.0.1:9999; SOCKS 127.0.0.1:9999;',
     'west': 'SOCKS5 127.0.0.1:10886; SOCKS 127.0.0.1:10886;',
 };
 
@@ -17,7 +18,7 @@ function isip(host) {
 }
 
 function isio(host) {
-    return /[^\.]+\.[io|edu|ph|jp|hk|us|top|tv]+$/.test(host);
+    return /[^\.]+\.[io|edu|ph|jp|hk|us|top|tv|re|sk|tw]+$/.test(host);
 }
 
 function FindProxyForURL(url, host) {
@@ -61,7 +62,7 @@ var proxyDomains = {
     "ip.cn": "jp",
     "ip138.com": "jp",
 
-    "techxmind.com": "hk",
+    "techxmind.com": "tm",
 
     "nexo.com": "jp",
     "binance.com": "jp",
@@ -71,7 +72,12 @@ var proxyDomains = {
     "sun.io": "jp",
     "usdd.io": "jp",
     "tdr.org": "jp",
+    "bitget.com": "jp",
+    "bybit.com": "jp",
+    "kucoin.com": "jp",
+    "quicknode.com": "jp",
 
+    "1point3acres.com": "ss",
     "venmo.com": "ss",
     "uniswap.org": "ss",
     "temu.com": "ss",
@@ -120,6 +126,7 @@ var proxyDomains = {
     "coingecko.com": "ss",
     "ftx.com": "ss",
     "javbus.com": "ss",
+    "javdb.com": "ss",
     "javbus.org": "ss",
     "harmony.one": "ss",
     "1lib.us": "ss",
@@ -692,6 +699,7 @@ var proxyDomains = {
     "directcreative.com": "ss",
     "discogs.com": "ss",
     "discordapp.com": "ss",
+    "discord.com": "ss",
     "disp.cc": "ss",
     "dit-inc.us": "ss",
     "dizhuzhishang.com": "ss",
@@ -2001,6 +2009,8 @@ var proxyDomains = {
     "recaptcha.net": "ss",
     "recordhistory.org": "ss",
     "redchinacn.org": "ss",
+    "redditstatic.com": "ss",
+    "redditmedia.com": "ss",
     "reddit.com": "ss",
     "referer.us": "ss",
     "reflectivecode.com": "ss",
