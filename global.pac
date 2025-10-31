@@ -5,6 +5,7 @@ var proxies = { // 下面这种写法才能兼容chrome和safari
     'jp': 'SOCKS5 127.0.0.1:1082; SOCKS 127.0.0.1:1082;',
     'hk': 'SOCKS5 127.0.0.1:1083; SOCKS 127.0.0.1:1083;',
     'tm': 'SOCKS4 127.0.0.1:9999; SOCKS 127.0.0.1:9999;',
+    'nofx': 'SOCKS4 127.0.0.1:8888; SOCKS 127.0.0.1:8888;', // nofx专用
     'west': 'SOCKS5 127.0.0.1:10886; SOCKS 127.0.0.1:10886;',
 };
 
@@ -17,8 +18,12 @@ function isip(host) {
     return false;
 }
 
-function isio(host) {
-    return /[^\.]+\.[io|edu|ph|jp|hk|us|top|tv|re|sk|tw]+$/.test(host);
+function isjp(host) {
+    return /[^\.]+\.[jp|network]+$/.test(host);
+}
+
+function isus(host) {
+    return /[^\.]+\.[sh|ai|news|io|edu|ph|hk|us|top|tv|re|sk|tw|google]+$/.test(host);
 }
 
 function FindProxyForURL(url, host) {
@@ -34,8 +39,12 @@ function FindProxyForURL(url, host) {
             return proxies[proxyName];
         }
     }
+
+    if (isjp(host)) { // 优先级最低规则
+        return proxies['jp'];
+    }
     
-    if (isio(host)) { // 优先级最低规则
+    if (isus(host)) { // 优先级最低规则
         return proxies['ss'];
     }
 
@@ -56,15 +65,28 @@ var proxyDomains = {
     "openaiapi-site.azureedge.net": "jp",
     "sentry.io": "jp",
     "stripe.com": "jp",
+    "chatgpt.com": "jp",
+
+    // ledger
+    "ledger.com": "jp",
+    "ledger-stg.com": "jp",
+    "ledger.statuspage.io": "jp",
+    "api.compound.finance": "jp",
+    "testnet-ledger.cardanoscan.io": "jp",
+    "crypto.org": "jp",
 
     // ip test
     "whatismyip.com": "jp",
     "ip.cn": "jp",
     "ip138.com": "jp",
 
+    "hemin.vip": "nofx",
+
     "techxmind.com": "tm",
 
+    "co.jp": "jp",
     "nexo.com": "jp",
+    "binancefuture.com": "jp",
     "binance.com": "jp",
     "bnbstatic.com": "jp",
     "tronscan.org": "jp",
@@ -76,12 +98,38 @@ var proxyDomains = {
     "bybit.com": "jp",
     "kucoin.com": "jp",
     "quicknode.com": "jp",
+    "solana.com": "jp",
+    "dexscreener.com": "jp",
+    "annas-archive.org": "jp",
+    "hecoinfo.com": "jp",
+    "hecoscan.io": "jp",
+    "htx.com": "jp",
+    "orca.so": "jp",
+    "hashkey.com": "jp",
+    "civitai.com": "jp",
+    "rpcpool.com": "jp",
+    "aicoin.com": "jp",
+    "polymarket.com": "jp",
+    "pump.fun": "jp",
+    "pornhub.com": "jp",
+    "rootdata.com": "jp",
+    "fastbull.com": "jp",
+    "arkm.com": "jp",
+    "zaochenbao.com": "jp",
 
+    "saasexch.com": "ss",
+    "bntrace.com": "ss",
+    "bitwarden.com": "ss",
+    "truthsocial.com": "ss",
+    "docker.com": "ss",
+    "x.com": "ss",
+    "defillama.com": "ss",
     "1point3acres.com": "ss",
     "venmo.com": "ss",
     "uniswap.org": "ss",
     "temu.com": "ss",
     "fx110.com": "ss",
+    "fx123.com": "ss",
     "bibox.com": "ss",
     "uscardforum.com": "ss",
     "okx.com": "ss",
@@ -127,13 +175,13 @@ var proxyDomains = {
     "ftx.com": "ss",
     "javbus.com": "ss",
     "javdb.com": "ss",
+    "jdbstatic.com": "ss",
     "javbus.org": "ss",
     "harmony.one": "ss",
     "1lib.us": "ss",
     "tronscan.org": "ss",
     "tronscan.io": "ss",
     "tronlink.org": "ss",
-    "tron.network": "ss",
     "jetbrains.com": "ss",
     "v2ex.com": "ss",
     "notion.so": "ss",
@@ -587,7 +635,6 @@ var proxyDomains = {
     "cnyes.com": "ss",
     "co.id": "ss",
     "co.il": "ss",
-    "co.jp": "ss",
     "co.kr": "ss",
     "co.tv": "ss",
     "co.uk": "ss",
