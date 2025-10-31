@@ -27,17 +27,19 @@ function isus(host) {
 }
 
 function FindProxyForURL(url, host) {
-    var finalDomain = host;
-    if (!isip(host)) {
-        var splits = finalDomain.split('.').slice(-2);
-        if (splits.length == 1) return direct;
-        finalDomain = splits.join('.');
-    }
-    if (hasOwnProperty.call(proxyDomains, finalDomain)) {
-        var proxyName = proxyDomains[finalDomain];
-        if (hasOwnProperty.call(proxies, proxyName)) {
-            return proxies[proxyName];
+    if (isip(host)) return direct;
+
+    var domain = host;
+    // 迭代检查域名及其所有上级域名
+    while (domain.indexOf('.') !== -1) {
+        if (hasOwnProperty.call(proxyDomains, domain)) {
+            var proxyName = proxyDomains[domain];
+            if (hasOwnProperty.call(proxies, proxyName)) {
+                return proxies[proxyName];
+            }
         }
+        // 移除最左边的子域名，向上查找
+        domain = domain.substring(domain.indexOf('.') + 1);
     }
 
     if (isjp(host)) { // 优先级最低规则
@@ -79,8 +81,9 @@ var proxyDomains = {
     "whatismyip.com": "jp",
     "ip.cn": "jp",
     "ip138.com": "jp",
+    "myip.ipip.net": "jp", // 和ipip.net区分开了
 
-    "hemin.vip": "nofx",
+    "nofx.hemin.vip": "nofx",
 
     "techxmind.com": "tm",
 
